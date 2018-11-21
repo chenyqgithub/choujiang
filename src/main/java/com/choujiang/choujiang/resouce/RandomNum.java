@@ -16,7 +16,7 @@ public class RandomNum {
         }
     }
 
-    static int a = 0, b = 0, c = 0, d = 0;
+  public   static int a = 0, b = 0, c = 0, d = 0;
     static Map<String, Object> map = new HashMap<>();
     public static void main(String[] args) {
 
@@ -55,21 +55,27 @@ public class RandomNum {
         return ((int) (Math.random() * (list.size())));
     }
 
-    public synchronized static void init(){
+    public synchronized static int  init(){
+        Integer success=-1;
         if(list.size()>0){
             int random = random();
             Integer integer = list.get(random);
             map.put(integer + "", integer);
             if (integer >= 1990 && integer < 2000) {
                 a++;
+               success=0;
             } else if (integer >= 1890 && integer < 1990) {
                 b++;
+                success=1;
             }else if(integer >= 1650&& integer < 1890){
                 c++;
+                success=2;
             }else {
                 d++;
+                success=3;
             }
             list.remove(random);
         }
+        return success;
     }
 }
