@@ -1,14 +1,25 @@
 package com.choujiang.choujiang;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.choujiang.choujiang.entity.CodeInfo;
 import com.choujiang.choujiang.entity.LjInfo;
 import com.choujiang.choujiang.repository.CodeRepository;
 import com.choujiang.choujiang.repository.LjINfoRepository;
 import com.choujiang.choujiang.resouce.RandomNum;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,6 +28,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/code")
 public class CodeController {
+    private final Log logger = LogFactory.getLog(CodeController.class);
     @Autowired
     private CodeRepository codeRepository;
     @Autowired
@@ -30,6 +42,7 @@ public class CodeController {
      */
     @RequestMapping("/validationCode")
     public int validationCode(String code) {
+        logger.info(code);
         //判断是否有可用奖品
         if((RandomNum.a+RandomNum.b+RandomNum.c+RandomNum.d)>=2000){
             return -1;
@@ -69,8 +82,23 @@ public class CodeController {
      * @param address
      * @return
      */
-    @RequestMapping("/insertUserInfo")
-    public int insertUserInfo(String name,String phone,String address,Integer rewardtype){
+    @RequestMapping(value = "/insertUserInfo" ,method = RequestMethod.POST)
+    public int insertUserInfo(String name, String phone, String address, Integer rewardtype, HttpServletRequest request) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader((ServletInputStream) request.getInputStream(), "utf-8"));
+        br = br;
+        StringBuffer sb = new StringBuffer("");
+        String temp;
+        while ((temp = br.readLine()) != null) {
+            sb.append(temp);
+        }
+        br.close();
+        String s = sb.toString();
+        JSONObject jsonObject = JSON.parseObject(s);
+        name=jsonObject.getString("name");
+        phone=jsonObject.getString("phone");
+        address=jsonObject.getString("address");
+        rewardtype=Integer.parseInt(""+jsonObject.getString("rewardtype"));
+        logger.info("----------"+s);
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         LjInfo ljInfo= new LjInfo();
         ljInfo.setAddress(address);
