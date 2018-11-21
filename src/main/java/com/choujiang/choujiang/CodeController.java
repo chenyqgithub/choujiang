@@ -30,6 +30,10 @@ public class CodeController {
      */
     @RequestMapping("/validationCode")
     public int validationCode(String code) {
+        //判断是否有可用奖品
+        if((RandomNum.a+RandomNum.b+RandomNum.c+RandomNum.d)>=2000){
+            return -1;
+        }
         //查询条码是否可用
        int cout= codeRepository.countAllByCode(code);
         //可用 条码信息入库
