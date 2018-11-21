@@ -1,5 +1,9 @@
 package com.choujiang.choujiang;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.choujiang.choujiang.resouce.RandomNum;
+import com.choujiang.choujiang.utils.HttpUtils;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
@@ -9,8 +13,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import java.util.HashMap;
 
 
 @SpringBootApplication
@@ -19,6 +26,20 @@ public class ChoujiangApplication extends WebMvcConfigurerAdapter implements Com
     public static void main(String[] args) {
 
         SpringApplication.run(ChoujiangApplication.class, args);
+        //初始化Resouce值
+        String s = HttpUtils.sendPost("http://47.104.252.44:8089/api/getabcd", new HashMap<>());
+       if(!StringUtils.isEmpty(s)){
+           JSONObject jsonObject = JSON.parseObject(s);
+           Integer one = Integer.parseInt(""+jsonObject.get("a"));
+           Integer two = Integer.parseInt(""+jsonObject.get("b"));
+           Integer three = Integer.parseInt(""+jsonObject.get("c"));
+           Integer four = Integer.parseInt(""+jsonObject.get("d"));
+           RandomNum.a=one;
+           RandomNum.b=two;
+           RandomNum.c=three;
+           RandomNum.d=four;
+           //数据加载完毕
+       }
     }
 
     @Override
