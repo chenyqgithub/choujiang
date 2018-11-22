@@ -1,5 +1,7 @@
 package com.choujiang.choujiang.utils;
 
+import com.alibaba.fastjson.JSON;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -131,6 +133,7 @@ public class HttpUtils {
             // 设置通用属性
             httpConn.setRequestProperty("Accept", "*/*");
             httpConn.setRequestProperty("Connection", "Keep-Alive");
+            httpConn.setRequestProperty("Content-Type", "application/json");
             httpConn.setRequestProperty("User-Agent",
                     "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)");
             // 设置POST方式
@@ -139,7 +142,7 @@ public class HttpUtils {
             // 获取HttpURLConnection对象对应的输出流
             out = new PrintWriter(httpConn.getOutputStream());
             // 发送请求参数
-            out.write(params);
+            out.write(JSON.toJSONString(parameters));
             // flush输出流的缓冲
             out.flush();
             // 定义BufferedReader输入流来读取URL的响应，设置编码方式
@@ -173,8 +176,14 @@ public class HttpUtils {
      * @param args
      */
     public static void main(String[] args) {
-        Map<String, String> parameters = new HashMap<String, String>();
-        String result =sendPost("https://hybc.ikeek.cn:8443/api/code/getResultInfo", parameters);
-        System.out.println(result);
+       for(int i=0;i<1648;i++){
+           Map<String, String> parameters = new HashMap<String, String>();
+           parameters.put("name","222");
+           parameters.put("phone","222");
+           parameters.put("address","222");
+           parameters.put("rewardtype","3");
+           String result =sendPost("https://hybc.ikeek.cn:8443/api/code/insertUserInfo", parameters);
+           System.out.println(result);
+       }
     }
 }

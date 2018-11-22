@@ -6,6 +6,8 @@ import com.choujiang.choujiang.resouce.RandomNum;
 import com.choujiang.choujiang.utils.HttpUtils;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.springframework.boot.CommandLineRunner;
@@ -22,7 +24,7 @@ import java.util.HashMap;
 
 @SpringBootApplication
 public class ChoujiangApplication extends WebMvcConfigurerAdapter implements CommandLineRunner {
-
+    public static final Log logger = LogFactory.getLog(ChoujiangApplication.class);
     public static void main(String[] args) {
 
         SpringApplication.run(ChoujiangApplication.class, args);
@@ -38,7 +40,22 @@ public class ChoujiangApplication extends WebMvcConfigurerAdapter implements Com
            RandomNum.b=two;
            RandomNum.c=three;
            RandomNum.d=four;
+
+           //赋值list区间值
+           for(int i=0;i<(1650-four);i++){
+               RandomNum.list.add(i);
+           }
+           for(int i=0;i<(240-three);i++){
+               RandomNum.list.add((1650+i));
+           }
+           for(int i=0;i<(100-two);i++){
+               RandomNum.list.add((1890+i));
+           }
+           for(int i=0;i<(10-one);i++){
+               RandomNum.list.add((1990+i));
+           }
            //数据加载完毕
+           logger.info("数据加载完毕");
        }
     }
 

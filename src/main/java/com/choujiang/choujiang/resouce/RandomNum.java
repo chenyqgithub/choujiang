@@ -8,12 +8,16 @@ import java.util.Map;
 public class RandomNum {
     private static Integer maxNum = 2000;
     private static Integer leNum = 0;
-    static List<Integer> list = new ArrayList<>();
+   public static List<Integer> list = new ArrayList<>();
 
     static {
-        for (int i = 0; i < 2000; i++) {
-            list.add(i);
-        }
+//        for (int i = 0; i < 2000; i++) {
+//            list.add(i);
+//        }
+//        for (int i = 1647; i >=0; i--) {
+//            list.remove(i);
+//        }
+
     }
 
   public   static int a = 0, b = 0, c = 0, d = 0;

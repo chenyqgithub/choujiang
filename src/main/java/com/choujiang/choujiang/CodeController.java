@@ -7,16 +7,15 @@ import com.choujiang.choujiang.entity.LjInfo;
 import com.choujiang.choujiang.repository.CodeRepository;
 import com.choujiang.choujiang.repository.LjINfoRepository;
 import com.choujiang.choujiang.resouce.RandomNum;
+import com.choujiang.choujiang.utils.FileUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -93,12 +92,12 @@ public class CodeController {
         }
         br.close();
         String s = sb.toString();
+        logger.info("----------"+s);
         JSONObject jsonObject = JSON.parseObject(s);
         name=jsonObject.getString("name");
         phone=jsonObject.getString("phone");
         address=jsonObject.getString("address");
-        rewardtype=Integer.parseInt(""+jsonObject.getString("rewardtype"));
-        logger.info("----------"+s);
+        rewardtype=Integer.parseInt(""+jsonObject.get("rewardtype"));
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         LjInfo ljInfo= new LjInfo();
         ljInfo.setAddress(address);
@@ -125,4 +124,19 @@ public class CodeController {
         return map;
     }
 
+    @RequestMapping("/img")
+    public void renderPicture(HttpServletResponse response) {
+        String path = "/hyxt/choujiang/api/back.jpg";
+        try {
+            byte[] bytes = FileUtil.toByteArray(path);
+            response.getOutputStream().write(bytes);
+        } catch (Exception e) {
+            //如果找不到图片就返回一个默认图片
+            try {
+                response.sendRedirect("/static/img/head.png");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
 }
