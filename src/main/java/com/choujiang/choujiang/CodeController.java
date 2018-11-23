@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,8 +41,14 @@ public class CodeController {
      * @return
      */
     @RequestMapping("/validationCode")
-    public int validationCode(String code) {
+    public int validationCode(String code) throws ParseException {
         logger.info(code);
+        SimpleDateFormat simpleDateFormat =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date parse = simpleDateFormat.parse("2019-01-31 23:59:59");//到期时间
+        Date date = new Date();//当前时间
+        if(parse.getTime()<date.getTime()){//监听时间可用
+            return -2;
+        }
         //判断是否有可用奖品
         if((RandomNum.a+RandomNum.b+RandomNum.c+RandomNum.d)>=2000){
             return -1;
