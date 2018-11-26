@@ -34,6 +34,8 @@ public class CodeController {
     @Autowired
     private LjINfoRepository ljINfoRepository;
 
+
+
     /**
      * 验证条码是否可用
      *
@@ -43,6 +45,8 @@ public class CodeController {
     @RequestMapping("/validationCode")
     public int validationCode(String code) throws ParseException {
         logger.info(code);
+        //判断条码是否存在条码库
+
         SimpleDateFormat simpleDateFormat =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date parse = simpleDateFormat.parse("2019-01-31 23:59:59");//到期时间
         Date date = new Date();//当前时间
@@ -135,6 +139,33 @@ public class CodeController {
     public void renderPicture(HttpServletResponse response) {
         String path = "/hyxt/choujiang/api/back.jpg";
         try {
+            byte[] bytes = FileUtil.toByteArray(path);
+            response.getOutputStream().write(bytes);
+        } catch (Exception e) {
+            //如果找不到图片就返回一个默认图片
+            try {
+                response.sendRedirect("/static/img/head.png");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+    @RequestMapping("/prizeimg/{num}")
+    public void renderPicture(@PathVariable Integer num,HttpServletResponse response) {
+        String path = "/hyxt/choujiang/api/back.jpg";
+
+        try {
+            if(num!=null){
+                if(num==0){
+                    path = "/hyxt/choujiang/api/back0.jpg";
+                }else if(num==1){
+                    path = "/hyxt/choujiang/api/back1.jpg";
+                }else if(num==2){
+                    path = "/hyxt/choujiang/api/back2.jpg";
+                }else if(num==3){
+                    path = "/hyxt/choujiang/api/back3.jpg";
+                }
+            }
             byte[] bytes = FileUtil.toByteArray(path);
             response.getOutputStream().write(bytes);
         } catch (Exception e) {
