@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.choujiang.choujiang.entity.CodeInfo;
 import com.choujiang.choujiang.entity.LjInfo;
+import com.choujiang.choujiang.repository.CodeLibRepository;
 import com.choujiang.choujiang.repository.CodeRepository;
 import com.choujiang.choujiang.repository.LjINfoRepository;
 import com.choujiang.choujiang.resouce.RandomNum;
@@ -33,6 +34,8 @@ public class CodeController {
     private CodeRepository codeRepository;
     @Autowired
     private LjINfoRepository ljINfoRepository;
+    @Autowired
+    private CodeLibRepository codeLibRepository;
 
 
 
@@ -46,7 +49,10 @@ public class CodeController {
     public int validationCode(String code) throws ParseException {
         logger.info(code);
         //判断条码是否存在条码库
-
+        int i = codeLibRepository.countById(code);
+        if(i!=1){
+            return 1;
+        }
         SimpleDateFormat simpleDateFormat =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date parse = simpleDateFormat.parse("2019-01-31 23:59:59");//到期时间
         Date date = new Date();//当前时间
