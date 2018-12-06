@@ -52,6 +52,7 @@ public class RandomNum {
         System.out.println("b-"+b);
         System.out.println("c-"+c);
         System.out.println("d-"+d);
+        System.out.println("listSize=" + list.size());
 
     }
 
