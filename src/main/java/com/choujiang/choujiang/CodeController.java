@@ -60,7 +60,7 @@ public class CodeController {
             return 1;
         }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date parse = simpleDateFormat.parse("2019-01-31 23:59:59");//到期时间
+        Date parse = simpleDateFormat.parse("2019-03-10 23:59:59");//到期时间
         Date date = new Date();//当前时间
         if (parse.getTime() < date.getTime()) {//监听时间可用
             return -2;
